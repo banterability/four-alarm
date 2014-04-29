@@ -9,6 +9,6 @@
   "author": "Jeff Long",
   "license": "MIT",
   "dependencies": {
-    "foursquarevenues": "0.0.12"
+    "request": "^2.34.0"
   }
 }
