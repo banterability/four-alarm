@@ -23,7 +23,7 @@ class FoursquareClient
 
   getCategories: (callback) ->
     @fetch 'venues/categories', {}, (err, data) ->
-      callback err, categories: data.response.categories
+      callback err, data.response.categories
 
 
 module.exports = FoursquareClient
