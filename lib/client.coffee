@@ -1,5 +1,5 @@
 request = require 'request'
-
+{extend} = require 'underscore'
 
 class FoursquareClient
   constructor: (options) ->
@@ -7,16 +7,18 @@ class FoursquareClient
     @clientId = options.clientId
     @clientSecret = options.clientSecret
 
-  fetch: (endpoint, params, callback) ->
-    requestOptions =
-      uri: "#{@baseUrl}/#{endpoint}"
-      qs:
-        v: '20140429'
-        client_id: @clientId
-        client_secret: @clientSecret
-      json: true
+  fetch: (endpoint, queryParams, callback) ->
+    defaultQueryParams =
+      v: '20140429'
+      client_id: @clientId
+      client_secret: @clientSecret
 
-    request requestOptions, (err, res, body) ->
+    apiOptions =
+      uri: "#{@baseUrl}/#{endpoint}"
+      json: true
+      qs: extend {}, queryParams, defaultQueryParams
+
+    request apiOptions, (err, res, body) ->
       callback err, body
 
   getCategories: (callback) ->
