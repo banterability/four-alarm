@@ -25,5 +25,12 @@ class FoursquareClient
     @fetch 'venues/categories', {}, (err, data) ->
       callback err, data.response.categories
 
+  getVenues: (options = {}, callback) ->
+    throw new Error "Location parameter ('ll' or 'near') required" unless @_hasRequiredParams options
+    @fetch 'venues/search', options, (err, data) ->
+      callback err, data.response.venues
+
+  _hasRequiredParams: (options) ->
+    options.ll? || options.near?
 
 module.exports = FoursquareClient
