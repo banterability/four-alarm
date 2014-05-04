@@ -19,16 +19,18 @@ class FoursquareClient
       qs: extend {}, queryParams, defaultQueryParams
 
     request apiOptions, (err, res, body) ->
+      return callback err if err?
+      return callback new Error body.meta.errorDetail unless body.meta.code == 200
       callback err, body
 
   getCategories: (callback) ->
     @fetch 'venues/categories', {}, (err, data) ->
-      callback err, data.response.categories
+      callback err, data?.response?.categories
 
   getVenues: (options = {}, callback) ->
     throw new Error "Location parameter ('ll' or 'near') required" unless @_hasRequiredParams options
     @fetch 'venues/search', options, (err, data) ->
-      callback err, data.response.venues
+      callback err, data?.response?.venues
 
   _hasRequiredParams: (options) ->
     options.ll? || options.near?
