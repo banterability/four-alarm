@@ -1,5 +1,4 @@
 fs = require 'fs'
-request = require 'request'
 {map} = require 'underscore'
 FoursquareClient = require './lib/client'
 
