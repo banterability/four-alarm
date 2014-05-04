@@ -1,16 +1,22 @@
 fs = require 'fs'
-{map} = require 'underscore'
+express = require 'express'
 FoursquareClient = require './lib/client'
+
+app = express()
 
 config = fs.readFileSync 'config.json', 'utf-8'
 {clientId, clientSecret} = JSON.parse config
 
 apiClient = new FoursquareClient {clientId, clientSecret}
 
-searchOptions =
-  categoryId: '4bf58dd8d48988d16c941735' # Burger Joint
-  intent: 'browse'
-  near: 'Chicago, IL'
+app.get '/categories', (req, res) ->
+  apiClient.getCategories (err, categories) ->
+    return respondWithError res, err if err?
+    res.send categories
 
-apiClient.getVenues searchOptions, (err, venues) ->
-  console.log map venues, (venue) -> venue.name
+respondWithError = (res, err) ->
+  res.send 500, {error: err.toString()}
+
+app.listen 5678, ->
+  console.log 'up on 5678...'
+
