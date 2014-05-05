@@ -6,11 +6,31 @@
   <style>
     html{ height: 100%;}
     body{ height: 100%; margin: 0; padding: 0;}
-    #map{ height: 100%;}
+    #map{ height: 100%; }
+    #visualization-controls{
+      position: absolute;
+      top: 0;
+      left: 100px;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 20px;
+    }
+    #visualization-controls input{
+      width: 300px;
+    }
+    #visualization-controls label, #visualization-controls input{
+      display: block;
+    }
   </style>
 </head>
 <body>
   <div id="map"></div>
+  <div id="visualization-controls">
+      <label for="category-id">Category Overlay:</label>
+      <input name="category-id" type="text" placeholder="Foursquare Category ID" disabled>
+      <br>
+      <label for="heatmap-radius">Heatmap Radius:</label>
+      <input name="heatmap-radius" type="range" min="0" max="200" value="1" disabled>
+    </div>
 
   <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=visualization"></script>
   <script>
