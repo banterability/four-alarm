@@ -11,6 +11,13 @@ config = fs.readFileSync 'config.json', 'utf-8'
 
 apiClient = new FoursquareClient {clientId, clientSecret}
 
+app.get '/', (req, res) ->
+  pageStream = fs.createReadStream('views/index.html')
+  pageStream.on 'open', ->
+    pageStream.pipe(res)
+  pageStream.on 'error', (err) ->
+    res.send 500, err
+
 app.get '/categories', (req, res) ->
   apiClient.getCategories (err, categories) ->
     return respondWithError res, err if err?
