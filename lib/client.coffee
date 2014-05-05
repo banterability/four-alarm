@@ -28,11 +28,14 @@ class FoursquareClient
       callback err, data?.response?.categories
 
   getVenues: (options = {}, callback) ->
-    throw new Error "Location parameter ('ll' or 'near') required" unless @_hasRequiredParams options
+    throw new Error "Missing location parameter(s)" unless @_hasRequiredParamsForVenueSearch options
     @fetch 'venues/search', options, (err, data) ->
       callback err, data?.response?.venues
 
-  _hasRequiredParams: (options) ->
-    options.ll? || options.near?
+  _hasRequiredParamsForVenueSearch: (options) ->
+    if options.intent == 'browse'
+      (options.ll? && options.radius?) || (options.ne? && options.sw?) || (options.near? && options.radius?)
+    else
+      options.ll? || options.near?
 
 module.exports = FoursquareClient
