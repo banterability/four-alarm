@@ -26,21 +26,29 @@
   <div id="map"></div>
   <div id="visualization-controls">
       <label for="category-id">Category Overlay:</label>
-      <input name="category-id" type="text" placeholder="Foursquare Category ID" disabled>
+      <input id="category-id" type="text" placeholder="Foursquare Category ID">
       <br>
       <label for="heatmap-radius">Heatmap Radius:</label>
-      <input name="heatmap-radius" type="range" min="0" max="200" value="1" disabled>
+      <input id="heatmap-radius" type="range" min="0" max="200" value="1">
     </div>
 
   <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=visualization"></script>
   <script>
-    var map = null;
+    var map = heatmap = null;
     var initMap = function(){
       var mapOptions = {
         center: new google.maps.LatLng(41.896596, -87.643159),
         zoom: 14
       };
       map = new google.maps.Map(document.querySelector('#map'), mapOptions);
+      heatmap = new google.maps.visualization.HeatmapLayer();
+
+      document.querySelector('#category-id').addEventListener('change', function(ev){
+        fetchMapDataForCategory(ev.currentTarget.value);
+      }, false);
+      document.querySelector('#heatmap-radius').addEventListener('change', function(ev){
+        updateHeatmapRadius(ev.currentTarget.value);
+      }, false);
     }
 
     google.maps.event.addDomListener(window, 'load', initMap);
@@ -51,6 +59,31 @@
         ne: '' + bounds.getNorthEast().lat() + ',' + bounds.getNorthEast().lng(),
         sw: '' + bounds.getSouthWest().lat() + ',' + bounds.getSouthWest().lng()
       }
+    };
+
+    var updateHeatmapRadius = function(radius){
+      heatmap.set('radius', parseInt(radius, 10));
+    }
+
+    var generateHeatmap = function(venues){
+      var pointData = new google.maps.MVCArray(venues.map(function(venue){
+        return new google.maps.LatLng(venue.location.lat, venue.location.lng)
+      }));
+      // https://developers.google.com/maps/documentation/javascript/reference#HeatmapLayerOptions
+      heatmap.setData(pointData)
+      heatmap.setMap(map);
+    }
+
+    var fetchMapDataForCategory = function(categoryId){
+      var request, boundaries;
+      boundaries = getMapBoundaries();
+      request = new XMLHttpRequest();
+      request.onload = function(){
+        var mapData = JSON.parse(this.responseText);
+        generateHeatmap(mapData);
+      }
+      request.open('get', '/venues/' + categoryId + '/?ne=' + boundaries.ne + '&sw=' + boundaries.sw , true);
+      request.send();
     }
   </script>
 </body>
