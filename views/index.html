@@ -26,7 +26,9 @@
   <div id="map"></div>
   <div id="visualization-controls">
       <label for="category-id">Category Overlay:</label>
-      <input id="category-id" type="text" placeholder="Foursquare Category ID">
+      <select id="category-id" disabled>
+        <option class="placeholder">Loading...</option>
+      </select>
       <br>
       <label for="heatmap-radius">Heatmap Radius:</label>
       <input id="heatmap-radius" type="range" min="0" max="200" value="1">
@@ -49,6 +51,7 @@
       document.querySelector('#heatmap-radius').addEventListener('change', function(ev){
         updateHeatmapRadius(ev.currentTarget.value);
       }, false);
+      fetchCategories();
     }
 
     google.maps.event.addDomListener(window, 'load', initMap);
@@ -72,6 +75,38 @@
       // https://developers.google.com/maps/documentation/javascript/reference#HeatmapLayerOptions
       heatmap.setData(pointData)
       heatmap.setMap(map);
+    }
+
+    var fetchCategories = function(){
+      // TODO: Handle 3rd-level categories (optgroups can't be nested)
+      fetch('/categories', function(){
+        generateCategoryList(JSON.parse(this.responseText));
+      });
+    }
+
+    var generateCategoryList = function(categories){
+      var fragment, optionList;
+      fragment = document.createDocumentFragment();
+      categories.forEach(function(category){
+        var groupEl;
+        groupEl = document.createElement('optgroup');
+        groupEl.label = category.name;
+        category.categories.forEach(function(subcategory){
+          var optionEl;
+          optionEl = document.createElement('option');
+          optionEl.label = subcategory.name;
+          optionEl.value = subcategory.id;
+          groupEl.appendChild(optionEl);
+        });
+        fragment.appendChild(groupEl);
+      });
+
+      // remove placeholder
+      optionList = document.querySelector('#category-id');
+      optionList.removeChild(optionList.querySelector('.placeholder'));
+
+      optionList.appendChild(fragment);
+      optionList.disabled = null;
     }
 
     var fetchMapDataForCategory = function(categoryId){
