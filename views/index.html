@@ -75,14 +75,20 @@
     }
 
     var fetchMapDataForCategory = function(categoryId){
-      var request, boundaries;
+      var boundaries, requestUrl;
       boundaries = getMapBoundaries();
-      request = new XMLHttpRequest();
-      request.onload = function(){
+      requestUrl = '/venues/' + categoryId + '/?ne=' + boundaries.ne + '&sw=' + boundaries.sw;
+      fetch(requestUrl, function(){
         var mapData = JSON.parse(this.responseText);
         generateHeatmap(mapData);
-      }
-      request.open('get', '/venues/' + categoryId + '/?ne=' + boundaries.ne + '&sw=' + boundaries.sw , true);
+      });
+    }
+
+    var fetch = function(url, callback){
+      var request;
+      request = new XMLHttpRequest();
+      request.onload = callback;
+      request.open('get', url, true);
       request.send();
     }
   </script>
