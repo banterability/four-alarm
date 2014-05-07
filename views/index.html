@@ -20,6 +20,14 @@
     #visualization-controls label, #visualization-controls input{
       display: block;
     }
+    .loading{
+      position: absolute;
+      width: 40px;
+      top: 41px;
+      right: 9px;
+      opacity: 0;
+      -webkit-transition: opacity 250ms ease-in;
+    }
   </style>
 </head>
 <body>
@@ -29,6 +37,7 @@
       <select id="category-id" disabled>
         <option class="placeholder">Loading...</option>
       </select>
+      <progress class="loading"></progress>
       <br>
       <label for="heatmap-radius">Heatmap Radius:</label>
       <input id="heatmap-radius" type="range" min="0" max="200" value="1">
@@ -77,10 +86,19 @@
       heatmap.setMap(map);
     }
 
+    var showLoadingBar = function(){
+      document.querySelector('.loading').style.opacity = 1;
+    }
+    var hideLoadingBar = function(){
+      document.querySelector('.loading').style.opacity = 0;
+    }
+
     var fetchCategories = function(){
       // TODO: Handle 3rd-level categories (optgroups can't be nested)
+      showLoadingBar();
       fetch('/categories', function(){
         generateCategoryList(JSON.parse(this.responseText));
+        hideLoadingBar();
       });
     }
 
@@ -111,11 +129,13 @@
 
     var fetchMapDataForCategory = function(categoryId){
       var boundaries, requestUrl;
+      showLoadingBar();
       boundaries = getMapBoundaries();
       requestUrl = '/venues/' + categoryId + '/?ne=' + boundaries.ne + '&sw=' + boundaries.sw;
       fetch(requestUrl, function(){
         var mapData = JSON.parse(this.responseText);
         generateHeatmap(mapData);
+        hideLoadingBar();
       });
     }
 
