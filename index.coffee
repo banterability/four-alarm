@@ -27,8 +27,6 @@ app.get '/categories', (req, res) ->
 app.get '/venues/:category', (req, res) ->
   # TODO: Handle other valid location parameter pairs (ll+radius, near+radius)
   {ne, sw} = req.query
-  console.log "ne", ne
-  console.log "sw", sw
   unless ne? && sw?
     return respondWithError res, new Error 'Bounding box (ne + sw) required'
 
