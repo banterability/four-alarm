@@ -10,7 +10,7 @@
   <div id="visualization-controls">
       <label for="category-id">Category Overlay:</label>
       <select id="category-id" disabled>
-        <option class="placeholder">Loading...</option>
+        <option class="placeholder" value="placeholder">Loading...</option>
       </select>
       <progress class="loading"></progress>
       <br>
@@ -19,6 +19,7 @@
     </div>
 
   <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=visualization"></script>
+  <script src="underscore.js"></script>
   <script>
     var map = heatmap = null;
     var initMap = function(){
@@ -36,7 +37,14 @@
         updateHeatmapRadius(ev.currentTarget.value);
       }, false);
       fetchCategories();
+      google.maps.event.addListener(map, 'bounds_changed', updateVenues);
     }
+
+    var updateVenues = _.debounce(function(){
+      var categoryId = document.querySelector('#category-id').value;
+      if(categoryId === 'placeholder'){ return false};
+      fetchMapDataForCategory(categoryId);
+    }, 250);
 
     google.maps.event.addDomListener(window, 'load', initMap);
 
