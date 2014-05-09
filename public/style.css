@@ -1,6 +1,20 @@
+*, *:before, *:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
 html{ height: 100%;}
-body{ height: 100%; margin: 0; padding: 0; font-family: Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serf;}
+
+body{
+  font-family: Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serf;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 #map{ height: 100%; }
+
 #visualization-controls{
   background-color: rgba(255, 255, 255, 0.8);
   left: 100px;
