@@ -43,6 +43,6 @@ app.get '/venues/:category', (req, res) ->
 respondWithError = (res, err) ->
   res.send 500, {error: err.toString()}
 
-app.listen 5678, ->
-  console.log 'up on 5678...'
-
+port = process.env.PORT || 5678
+app.listen port, ->
+  console.log "server up on #{port}..."
