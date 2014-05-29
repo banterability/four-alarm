@@ -1,5 +1,6 @@
-request = require 'request'
 {extend} = require 'underscore'
+request = require 'request'
+
 
 class FoursquareClient
   constructor: (options) ->
@@ -37,5 +38,6 @@ class FoursquareClient
       (options.ll? && options.radius?) || (options.ne? && options.sw?) || (options.near? && options.radius?)
     else
       options.ll? || options.near?
+
 
 module.exports = FoursquareClient

@@ -1,7 +1,8 @@
-fs = require 'fs'
 express = require 'express'
-morgan = require 'morgan'
 FoursquareClient = require './lib/client'
+fs = require 'fs'
+morgan = require 'morgan'
+
 
 app = express()
 app.use express.static "#{__dirname}/public"
