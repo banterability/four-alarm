@@ -1,4 +1,5 @@
-var map = heatmap = null;
+var map, heatmap;
+
 var initMap = function(){
   var mapOptions = {
     center: new google.maps.LatLng(41.896596, -87.643159),
