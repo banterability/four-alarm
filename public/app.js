@@ -15,11 +15,11 @@ var initMap = function(){
   }, false);
   fetchCategories();
   google.maps.event.addListener(map, 'bounds_changed', updateVenues);
-}
+};
 
 var updateVenues = _.debounce(function(){
   var categoryId = document.querySelector('#category-id').value;
-  if(categoryId === 'placeholder'){ return false};
+  if (categoryId === 'placeholder'){ return false; }
   fetchMapDataForCategory(categoryId);
 }, 250);
 
@@ -30,28 +30,29 @@ var getMapBoundaries = function(){
   return {
     ne: '' + bounds.getNorthEast().lat() + ',' + bounds.getNorthEast().lng(),
     sw: '' + bounds.getSouthWest().lat() + ',' + bounds.getSouthWest().lng()
-  }
+  };
 };
 
 var updateHeatmapRadius = function(radius){
   heatmap.set('radius', parseInt(radius, 10));
-}
+};
 
 var generateHeatmap = function(venues){
   var pointData = new google.maps.MVCArray(venues.map(function(venue){
-    return new google.maps.LatLng(venue.location.lat, venue.location.lng)
+    return new google.maps.LatLng(venue.location.lat, venue.location.lng);
   }));
   // https://developers.google.com/maps/documentation/javascript/reference#HeatmapLayerOptions
-  heatmap.setData(pointData)
+  heatmap.setData(pointData);
   heatmap.setMap(map);
-}
+};
 
 var showLoadingBar = function(){
   document.querySelector('.loading').style.opacity = 1;
-}
+};
+
 var hideLoadingBar = function(){
   document.querySelector('.loading').style.opacity = 0;
-}
+};
 
 var fetchCategories = function(){
   // TODO: Handle 3rd-level categories (optgroups can't be nested)
@@ -60,7 +61,7 @@ var fetchCategories = function(){
     generateCategoryList(JSON.parse(this.responseText));
     hideLoadingBar();
   });
-}
+};
 
 var generateCategoryList = function(categories){
   var fragment, optionList;
@@ -85,7 +86,7 @@ var generateCategoryList = function(categories){
 
   optionList.appendChild(fragment);
   optionList.disabled = null;
-}
+};
 
 var fetchMapDataForCategory = function(categoryId){
   var boundaries, requestUrl;
@@ -97,7 +98,7 @@ var fetchMapDataForCategory = function(categoryId){
     generateHeatmap(mapData);
     hideLoadingBar();
   });
-}
+};
 
 var fetch = function(url, callback){
   var request;
@@ -105,4 +106,4 @@ var fetch = function(url, callback){
   request.onload = callback;
   request.open('get', url, true);
   request.send();
-}
+};
