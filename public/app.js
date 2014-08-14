@@ -8,9 +8,9 @@ App = {
       sw: '' + bounds.getSouthWest().lat() + ',' + bounds.getSouthWest().lng()
     };
   },
-  updateHeatmapRadius: function(radius){
+  updateHeatmapRadius: _.throttle(function(radius){
     heatmap.set('radius', parseInt(radius, 10));
-  },
+  }, 50),
   generateHeatmap: function(venues){
     var pointData = new google.maps.MVCArray(venues.map(function(venue){
       return new google.maps.LatLng(venue.location.lat, venue.location.lng);
