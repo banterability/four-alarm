@@ -6,9 +6,9 @@ class FoursquareClient
     @baseUrl = 'https://api.foursquare.com/v2'
     @clientId = options.clientId
     @clientSecret = options.clientSecret
-    @register 'venues'
+    @registerEndpoints 'venues'
 
-  register: (namespace) ->
+  registerEndpoints: (namespace) ->
     endpoint = require("./endpoints/#{namespace}")(this)
     extend this, endpoint
 
