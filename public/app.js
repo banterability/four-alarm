@@ -93,7 +93,7 @@ initMap = function(){
   document.querySelector('#category-id').addEventListener('change', function(ev){
     App.fetchMapDataForCategory(ev.currentTarget.value);
   }, false);
-  document.querySelector('#heatmap-radius').addEventListener('change', function(ev){
+  document.querySelector('#heatmap-radius').addEventListener('input', function(ev){
     App.updateHeatmapRadius(ev.currentTarget.value);
   }, false);
   App.fetchCategories();
