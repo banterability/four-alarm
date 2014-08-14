@@ -1,12 +1,16 @@
 {extend} = require 'underscore'
 request = require 'request'
 
-
 class FoursquareClient
   constructor: (options) ->
     @baseUrl = 'https://api.foursquare.com/v2'
     @clientId = options.clientId
     @clientSecret = options.clientSecret
+    @register 'venues'
+
+  register: (namespace) ->
+    endpoint = require("./endpoints/#{namespace}")(this)
+    extend this, endpoint
 
   fetch: (endpoint, queryParams, callback) ->
     defaultQueryParams =
@@ -23,21 +27,5 @@ class FoursquareClient
       return callback err if err?
       return callback new Error body.meta.errorDetail unless body.meta.code == 200
       callback err, body
-
-  getCategories: (callback) ->
-    @fetch 'venues/categories', {}, (err, data) ->
-      callback err, data?.response?.categories
-
-  getVenues: (options = {}, callback) ->
-    throw new Error "Missing location parameter(s)" unless @_hasRequiredParamsForVenueSearch options
-    @fetch 'venues/search', options, (err, data) ->
-      callback err, data?.response?.venues
-
-  _hasRequiredParamsForVenueSearch: (options) ->
-    if options.intent == 'browse'
-      (options.ll? && options.radius?) || (options.ne? && options.sw?) || (options.near? && options.radius?)
-    else
-      options.ll? || options.near?
-
 
 module.exports = FoursquareClient

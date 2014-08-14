@@ -21,7 +21,7 @@ app.get '/', (req, res) ->
     res.send 500, err
 
 app.get '/categories', (req, res) ->
-  apiClient.getCategories (err, categories) ->
+  apiClient.venues.categories (err, categories) ->
     return respondWithError res, err if err?
     res.send categories
 
@@ -37,7 +37,7 @@ app.get '/venues/:category', (req, res) ->
     ne: ne
     sw: sw
 
-  apiClient.getVenues apiOptions, (err, venues) ->
+  apiClient.venues.search apiOptions, (err, venues) ->
     return respondWithError res, err if err?
     res.send venues
 
