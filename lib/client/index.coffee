@@ -14,14 +14,14 @@ class FoursquareClient
 
   fetch: (endpoint, queryParams, callback) ->
     defaultQueryParams =
-      v: '20140429'
       client_id: @clientId
       client_secret: @clientSecret
+      v: '20140429'
 
     apiOptions =
-      uri: "#{@baseUrl}/#{endpoint}"
       json: true
       qs: extend {}, queryParams, defaultQueryParams
+      uri: "#{@baseUrl}/#{endpoint}"
 
     request apiOptions, (err, res, body) ->
       return callback err if err?
