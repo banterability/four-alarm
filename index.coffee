@@ -1,8 +1,7 @@
 express = require 'express'
-FoursquareClient = require './lib/client'
+Dodge = require 'dodge'
 fs = require 'fs'
 morgan = require 'morgan'
-
 
 app = express()
 app.use express.static "#{__dirname}/public"
@@ -11,7 +10,7 @@ app.use morgan('dev')
 config = fs.readFileSync 'config.json', 'utf-8'
 {clientId, clientSecret} = JSON.parse config
 
-apiClient = new FoursquareClient {clientId, clientSecret}
+apiClient = new Dodge {clientId, clientSecret}
 
 app.get '/', (req, res) ->
   pageStream = fs.createReadStream('views/index.html')
