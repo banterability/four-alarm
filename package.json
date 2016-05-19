@@ -2,7 +2,7 @@
   "name": "four-alarm",
   "version": "0.0.0",
   "description": "Heat mapping against the Foursquare API",
-  "main": "index.coffee",
+  "main": "server.js",
   "author": "Jeff Long",
   "license": "MIT",
   "dependencies": {
